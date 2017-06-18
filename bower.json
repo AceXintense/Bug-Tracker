@@ -1,0 +1,17 @@
+{
+  "name": "Bug-Tracker",
+  "authors": [
+    "Sam Grew <shanker1210@hotmail.co.uk>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

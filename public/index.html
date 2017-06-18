@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Bug Tracker</title>
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
+		<link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="resources/css/app.css" />
+		
+		<!-- Scripts -->
+		<script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="resources/bower_components/angular/angular.min.js"></script>
+		<script src="resources/js/app.js"></script>
+	</head>
+	<body ng-controller="IssueController" ng-class="{'dark-theme': theme == 'dark'}">
+		<div class="container">
+
+			<div class="errorContainer">
+				<div class="error" ng-repeat="error in errors">
+					<h1>{{ error.title }}</h1>
+					<p>{{ error.message }}</p>
+				</div>
+			</div>
+			
+			<div class="jumbotron">
+				<h1 ng-if="selectedProject" ng-cloak>{{selectedProject}}</h1>
+				<h1 ng-if="!selectedProject" ng-cloak>No Project selected.</h1>
+				<button class="btn btn-default" ng-click="settings = !settings">Settings</button>
+
+
+				<div class="settings" ng-show="settings" ng-cloak>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<label for="profile">Profile</label>
+							<input type="text" ng-model="profile" id="profile" class="form-control" />
+						</div>
+						<div class="col-sm-6">
+							<label for="personal-token">Personal Token</label>
+							<input type="text" ng-model="personalToken" id="personal-token" class="form-control" />
+						</div>
+						<div class="col-sm-6">
+							<div class="form-check">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" ng-model="theme" value="light">
+									  Light mode
+								</label>
+							</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" ng-model="theme" value="dark" class="form-check-input">
+									  Dark mode
+								</label>
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<button class="btn btn-success" ng-click="changeProfile()">Apply</button>
+						</div>
+
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="newIssue">
+				<button class="btn btn-success" ng-show="selectedProject" ng-click="createIssue = !createIssue">New Issue</button>
+				<div class="card" ng-if="createIssue && selectedProject" ng-controller="createIssueController">
+					<div class="card-block">
+						<h4 class="card-title">Create a new ticket for {{selectedProject}}</h4>
+						<div class="form-group">
+							<label for="title">Title</label>
+							<input type="text" id="title" name="title" class="form-control" ng-model="title" />
+						</div>
+						<div class="form-group">
+							<label for="body">Body</label>
+							<textarea type="text" id="body" name="body" class="form-control" ng-model="body"></textarea>
+						</div>
+						<button ng-click="submitNewIssue()">Submit</button>
+					</div>
+				</div>
+				
+			</div>
+
+			<div class="row">
+
+				<div class="col-sm-4">
+					<div class="projects">
+						<ul class="list-group">
+						  <li class="list-group-item" ng-class="{'active': selectedProject == project.name}" ng-repeat="project in projects" ng-click="selectProject(project.name)"><span>{{project.name}}</span> <div class="badge badge-default"> {{project.open_issues_count}}</div> </li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-sm-8">
+					<div class="row">
+						<div class="col-sm-6" ng-repeat="issue in issues">
+							<div class="card animated fadeInUp" style="width: 20rem;" ng-if="issues.length > 0" ng-cloak>
+						<!-- 	  <img class="card-img-top" src="..." alt="Card image cap"> -->
+							  <div class="card-block">
+								 <h4 class="card-title">
+									 {{issue.title}}
+								  </h4>
+								  <span class="badge badge-pill badge-default badge-{{issue.state}}">{{issue.state}}</span>
+								  <div class="labels">
+									  <div class="label badge badge-pill badge-default" ng-repeat="label in issue.labels" ng-style="{'background-color': '#' + label.color}">{{label.name}}</div>
+								  </div>
+								 <p class="card-text">{{issue.body}}</p>
+
+								 <a href="{{issue.html_url}}" target='_blank' class="btn btn-primary">View</a>
+							  </div>
+							</div>
+
+							<div class="loader" ng-if="!issues">
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+								<div class="bar"></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
